@@ -136,6 +136,9 @@ socket.on('resetError', (errorMessage) => {
   showNotification(errorMessage, 'failed');
 });
 
+
+
+
 socket.on('joinError', (message) => {
   status.textContent = message;
   showNotification(message, 'failed');
@@ -150,14 +153,6 @@ socket.on('playerLeft', ({ isHost: newHostStatus }) => {
   stopTimer();
 });
 
-socket.on('connect_error', (error) => {
-  showNotification('Connection error. Please try again later.', 'failed');
-  console.error('Connection error:', error);
-});
-
-socket.on('disconnect', () => {
-  showNotification('Disconnected from server.', 'failed');
-});
 
 function startTimer() {
   clearInterval(timerInterval);
@@ -234,10 +229,37 @@ function resetGame(roomData) {
   updateBoard(roomData.board);
 }
 
+
 function updateResetButton() {
   if (gameState === 'ended') {
     resetGameBtn.classList.remove('hidden');
+    resetGameBtn.disabled = !isHost;
+    resetGameBtn.title = isHost ? 'Reset the game' : 'Only the host can reset the game';
   } else {
     resetGameBtn.classList.add('hidden');
   }
 }
+
+
+function logGameState() {
+  console.log('Current game state:', {
+    isHost,
+    gameState,
+    player,
+    roomId
+  });
+}
+
+
+
+gameStartOverlay.addEventListener('animationend', (event) => {
+  if (event.animationName === 'fadeOut') {
+    gameStartOverlay.classList.add('hidden');
+  }
+});
+
+gameEndOverlay.addEventListener('animationend', (event) => {
+  if (event.animationName === 'fadeOut') {
+    gameEndOverlay.classList.add('hidden');
+  }
+});
