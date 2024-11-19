@@ -1,6 +1,9 @@
 import { showNotification } from './notification.js';
 
-const socket = io('https://tic-tac-toe-backend-us8a.onrender.com');
+const socket = io("https://tic-tac-toe-backend-us8a.onrender.com", {
+  transports: ["websocket", "polling"],
+});
+
 
 const createRoomBtn = document.getElementById('create-room');
 const joinRoomBtn = document.getElementById('join-room');
